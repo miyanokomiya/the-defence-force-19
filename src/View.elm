@@ -7,7 +7,7 @@ import Playground
 sight : Model.Sight -> Playground.Shape
 sight si =
     Playground.group
-        [ Playground.image 96 96 "/assets/sight.png"
+        [ Playground.image 96 96 "assets/sight.png"
         ]
         |> Playground.move si.x si.y
 
