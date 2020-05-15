@@ -1,11 +1,12 @@
-module Model exposing (Bullet, Enemy, Model, Sight)
+module Model exposing (Bullet, BulletHole, Enemy, Model, Sight)
 
 
 type alias Model =
     { enemies : List Enemy
     , bullets : List Bullet
     , sight : Sight
-    , cooldown: Float
+    , cooldown : Float
+    , bulletHoles : List BulletHole
     }
 
 
@@ -17,6 +18,13 @@ type alias Enemy =
 
 type alias Bullet =
     {}
+
+
+type alias BulletHole =
+    { x : Float
+    , y : Float
+    , life : Float
+    }
 
 
 type alias Sight =

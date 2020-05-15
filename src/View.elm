@@ -1,4 +1,4 @@
-module View exposing (bullet, cooldown, enemy, sight)
+module View exposing (bullet, bulletHole, cooldown, enemy, sight)
 
 import Model
 import Playground
@@ -26,6 +26,12 @@ bullet screen index _ =
     in
     Playground.rectangle Playground.blue 40 h
         |> Playground.move (screen.right - 50) (toFloat (index * 20) + h / 2 + 30 + screen.bottom)
+
+
+bulletHole : Model.BulletHole -> Playground.Shape
+bulletHole hole =
+    Playground.image 128 128 "assets/bullet_hole_1.png"
+        |> Playground.move hole.x hole.y
 
 
 cooldown : Playground.Screen -> Float -> Playground.Shape
