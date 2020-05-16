@@ -11,6 +11,7 @@ initModel : Model
 initModel =
     { seed = Random.initialSeed 1
     , level = 1
+    , deleteCount = 0
     , enemies = []
     , bullets = initBullets
     , sight = { x = 0, y = 0 }
@@ -109,9 +110,13 @@ update computer model =
 
             else
                 enemiesAfterPop
+
+        deleteCount =
+            model.deleteCount + List.length enemiesAfterPop - List.length enemiesAfterFire
     in
     { model
-        | enemyPopCooldown =
+        | deleteCount = deleteCount
+        , enemyPopCooldown =
             if enemyPopCooldown <= 0 then
                 1
 

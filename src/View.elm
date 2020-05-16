@@ -8,10 +8,17 @@ scoreBoard : Playground.Computer -> Model -> Playground.Shape
 scoreBoard com model =
     Playground.group
         [ Playground.words Playground.black
-            (String.fromInt (List.length model.enemies)
+            ("Enemies: "
+                ++ String.fromInt (List.length model.enemies)
                 ++ " / "
                 ++ String.fromInt (Model.maxEnemyAtLevel model.level)
             )
+            |> Playground.move -100 0
+        , Playground.words Playground.black
+            ("Score: "
+                ++ String.fromInt model.deleteCount
+            )
+            |> Playground.move 100 0
         ]
         |> Playground.move 0 (com.screen.top - 16)
         |> Playground.scale 1.5

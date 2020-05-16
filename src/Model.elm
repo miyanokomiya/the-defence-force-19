@@ -6,6 +6,7 @@ import Random
 type alias Model =
     { seed : Random.Seed
     , level : Int
+    , deleteCount : Int
     , enemies : List Enemy
     , bullets : List Bullet
     , sight : Sight
