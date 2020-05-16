@@ -1,8 +1,11 @@
 module Model exposing (Bullet, BulletHole, Enemy, Model, Sight)
 
+import Random
+
 
 type alias Model =
-    { enemies : List Enemy
+    { seed : Random.Seed
+    , enemies : List Enemy
     , bullets : List Bullet
     , sight : Sight
     , cooldown : Float
@@ -13,6 +16,8 @@ type alias Model =
 type alias Enemy =
     { x : Float
     , y : Float
+    , direction : Float
+    , speed : Float
     }
 
 

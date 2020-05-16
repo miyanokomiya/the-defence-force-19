@@ -31,6 +31,7 @@ bullet screen index _ =
 bulletHole : Model.BulletHole -> Playground.Shape
 bulletHole hole =
     Playground.image 128 128 "assets/bullet_hole_1.png"
+        |> Playground.fade hole.life
         |> Playground.move hole.x hole.y
 
 

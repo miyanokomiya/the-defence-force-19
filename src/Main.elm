@@ -2,16 +2,27 @@ module Main exposing (..)
 
 import Model exposing (Model)
 import Playground exposing (..)
+import Random
 import View
 
 
 initModel : Model
 initModel =
-    { enemies = [ { x = -30, y = 80 }, { x = 30, y = 80 } ]
+    { seed = Random.initialSeed 1
+    , enemies = []
     , bullets = initBullets
     , sight = { x = 0, y = 0 }
     , cooldown = 0
     , bulletHoles = []
+    }
+
+
+initEnemy : Float -> Float -> Model.Enemy
+initEnemy x y =
+    { x = x
+    , y = y
+    , direction = pi / 4
+    , speed = 5
     }
 
 
@@ -22,7 +33,10 @@ initBullets =
 
 initBulletHole : Float -> Float -> Model.BulletHole
 initBulletHole x y =
-    { x = x, y = y, life = 1 }
+    { x = x
+    , y = y
+    , life = 1
+    }
 
 
 main =
@@ -78,6 +92,9 @@ update computer model =
             )
                 |> List.map (\h -> { h | life = h.life - 0.02 })
                 |> List.filter (\h -> h.life > 0)
+
+        ( enemiesAfterPop, s1 ) =
+            mayPopEnemies computer model.seed model.enemies
     in
     { model
         | sight = nextSight
@@ -97,4 +114,62 @@ update computer model =
                             0.05
                           )
                     )
+        , enemies =
+            enemiesAfterPop
+                |> List.map (\e -> moveEnemy computer.screen e)
+        , seed = s1
+    }
+
+
+mayPopEnemies : Computer -> Random.Seed -> List Model.Enemy -> ( List Model.Enemy, Random.Seed )
+mayPopEnemies com seed before =
+    if modBy 360 (floor (spin 3 com.time)) < 3 then
+        let
+            ( pop, nextSeed ) =
+                popEnemy com seed
+        in
+        ( before ++ [ pop ], nextSeed )
+
+    else
+        ( before, seed )
+
+
+popEnemy : Computer -> Random.Seed -> ( Model.Enemy, Random.Seed )
+popEnemy com seed =
+    let
+        ( x, s1 ) =
+            Random.step (Random.float com.screen.left com.screen.right) seed
+
+        y =
+            com.screen.top
+
+        ( direction, s2 ) =
+            Random.step (Random.float (pi * 5 / 4) (pi * 7 / 4)) s1
+    in
+    ( { x = x
+      , y = y
+      , direction = direction
+      , speed = 3
+      }
+    , s2
+    )
+
+
+moveEnemy : Screen -> Model.Enemy -> Model.Enemy
+moveEnemy screen before =
+    let
+        radian =
+            if before.y < screen.bottom || screen.top < before.y then
+                -before.direction
+
+            else if before.x < screen.left || screen.right < before.x then
+                pi - before.direction
+
+            else
+                before.direction
+    in
+    { before
+        | direction = radian
+        , x = before.x + cos radian * before.speed
+        , y = before.y + sin radian * before.speed
     }
