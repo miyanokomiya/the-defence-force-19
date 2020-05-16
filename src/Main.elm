@@ -71,7 +71,7 @@ update : Computer -> Model -> Model
 update computer model =
     let
         enemyPopCooldown =
-            model.enemyPopCooldown - 1 / 60 / 3
+            model.enemyPopCooldown - 1 / 60 / 2
 
         fire =
             List.length model.bullets > 0 && computer.keyboard.space && model.cooldown <= 0
@@ -105,11 +105,7 @@ update computer model =
             mayPopEnemies computer model.seed model.level enemyPopCooldown model.enemies
 
         enemiesAfterFire =
-            if fire then
-                enemiesAfterPop |> List.filter (\e -> isHitEnemy model.sight.x model.sight.y e == False)
-
-            else
-                enemiesAfterPop
+            enemiesAfterPop |> List.filter (\e -> isHolesHitEnemy nextBulletHoles e == False)
 
         deleteCount =
             model.deleteCount + List.length enemiesAfterPop - List.length enemiesAfterFire
@@ -201,6 +197,11 @@ moveEnemy screen before =
         , x = before.x + cos radian * before.speed
         , y = before.y + sin radian * before.speed
     }
+
+
+isHolesHitEnemy : List Model.BulletHole -> Model.Enemy -> Bool
+isHolesHitEnemy holes enemy =
+    holes |> List.any (\h -> isHitEnemy h.x h.y enemy)
 
 
 isHitEnemy : Float -> Float -> Model.Enemy -> Bool
