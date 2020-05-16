@@ -533,11 +533,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.af.J === region.ak.J)
+	if (region.af.I === region.ak.I)
 	{
-		return 'on line ' + region.af.J;
+		return 'on line ' + region.af.I;
 	}
-	return 'on lines ' + region.af.J + ' through ' + region.ak.J;
+	return 'on lines ' + region.af.I + ' through ' + region.ak.I;
 }
 
 
@@ -7317,7 +7317,7 @@ var $evancz$elm_playground$Playground$gameUpdate = F3(
 					_Utils_update(
 						computer,
 						{
-							E: A2($evancz$elm_playground$Playground$toScreen, viewport.a1, viewport.an)
+							D: A2($evancz$elm_playground$Playground$toScreen, viewport.a1, viewport.an)
 						}));
 			case 3:
 				var w = msg.a;
@@ -7329,7 +7329,7 @@ var $evancz$elm_playground$Playground$gameUpdate = F3(
 					_Utils_update(
 						computer,
 						{
-							E: A2($evancz$elm_playground$Playground$toScreen, w, h)
+							D: A2($evancz$elm_playground$Playground$toScreen, w, h)
 						}));
 			case 0:
 				var isDown = msg.a;
@@ -7346,8 +7346,8 @@ var $evancz$elm_playground$Playground$gameUpdate = F3(
 			case 5:
 				var pageX = msg.a;
 				var pageY = msg.b;
-				var y = computer.E.aY - pageY;
-				var x = computer.E.ar + pageX;
+				var y = computer.D.aY - pageY;
+				var x = computer.D.ar + pageX;
 				return A3(
 					$evancz$elm_playground$Playground$Game,
 					vis,
@@ -7396,7 +7396,7 @@ var $elm$browser$Browser$Dom$getViewport = _Browser_withWindow(_Browser_getViewp
 var $evancz$elm_playground$Playground$initialComputer = {
 	Z: $evancz$elm_playground$Playground$emptyKeyboard,
 	f: A4($evancz$elm_playground$Playground$Mouse, 0, 0, false, false),
-	E: A2($evancz$elm_playground$Playground$toScreen, 600, 600),
+	D: A2($evancz$elm_playground$Playground$toScreen, 600, 600),
 	R: $elm$time$Time$millisToPosix(0)
 };
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
@@ -7729,7 +7729,7 @@ var $evancz$elm_playground$Playground$game = F3(
 					[
 						A2(
 						$evancz$elm_playground$Playground$render,
-						computer.E,
+						computer.D,
 						A2(viewMemory, computer, memory))
 					]),
 				bj: 'Playground'
@@ -7786,15 +7786,15 @@ var $elm$random$Random$initialSeed = function (x) {
 		A2($elm$random$Random$Seed, state2, incr));
 };
 var $author$project$Main$initModel = {
-	I: _List_Nil,
+	H: _List_Nil,
 	v: $author$project$Main$initBullets,
-	B: 0,
+	A: 0,
 	W: 0,
 	O: _List_Nil,
 	X: 1,
 	as: 1,
 	ac: $elm$random$Random$initialSeed(1),
-	z: {i: 0, j: 0}
+	J: {i: 0, j: 0}
 };
 var $elm$core$List$drop = F2(
 	function (n, list) {
@@ -7832,6 +7832,27 @@ var $author$project$Main$initBulletHole = F2(
 	function (x, y) {
 		return {P: 1, i: x, j: y};
 	});
+var $elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
 var $elm_explorations$linear_algebra$Math$Vector2$distance = _MJS_v2distance;
 var $elm_explorations$linear_algebra$Math$Vector2$vec2 = _MJS_v2;
 var $author$project$Main$isHitEnemy = F3(
@@ -7840,6 +7861,15 @@ var $author$project$Main$isHitEnemy = F3(
 			$elm_explorations$linear_algebra$Math$Vector2$distance,
 			A2($elm_explorations$linear_algebra$Math$Vector2$vec2, x, y),
 			A2($elm_explorations$linear_algebra$Math$Vector2$vec2, enemy.i, enemy.j)) < 48;
+	});
+var $author$project$Main$isHolesHitEnemy = F2(
+	function (holes, enemy) {
+		return A2(
+			$elm$core$List$any,
+			function (h) {
+				return A3($author$project$Main$isHitEnemy, h.i, h.j, enemy);
+			},
+			holes);
 	});
 var $author$project$Model$maxEnemyAtLevel = function (level) {
 	return 20 * level;
@@ -7878,10 +7908,10 @@ var $elm$random$Random$step = F2(
 	});
 var $author$project$Main$popEnemy = F2(
 	function (com, seed) {
-		var y = com.E.aY;
+		var y = com.D.aY;
 		var _v0 = A2(
 			$elm$random$Random$step,
-			A2($elm$random$Random$float, com.E.ar, com.E.aU),
+			A2($elm$random$Random$float, com.D.ar, com.D.aU),
 			seed);
 		var x = _v0.a;
 		var s1 = _v0.b;
@@ -7898,7 +7928,7 @@ var $author$project$Main$popEnemy = F2(
 		var speed = _v2.a;
 		var s3 = _v2.b;
 		return _Utils_Tuple2(
-			{C: direction, Q: speed, i: x, j: y},
+			{B: direction, Q: speed, i: x, j: y},
 			s3);
 	});
 var $author$project$Main$mayPopEnemies = F5(
@@ -7921,11 +7951,11 @@ var $author$project$Main$mayPopEnemies = F5(
 	});
 var $author$project$Main$moveEnemy = F2(
 	function (screen, before) {
-		var radian = ((_Utils_cmp(before.j, screen.a5) < 0) || (_Utils_cmp(screen.aY, before.j) < 0)) ? (-before.C) : (((_Utils_cmp(before.i, screen.ar) < 0) || (_Utils_cmp(screen.aU, before.i) < 0)) ? ($elm$core$Basics$pi - before.C) : before.C);
+		var radian = ((_Utils_cmp(before.j, screen.a5) < 0) || (_Utils_cmp(screen.aY, before.j) < 0)) ? (-before.B) : (((_Utils_cmp(before.i, screen.ar) < 0) || (_Utils_cmp(screen.aU, before.i) < 0)) ? ($elm$core$Basics$pi - before.B) : before.B);
 		return _Utils_update(
 			before,
 			{
-				C: radian,
+				B: radian,
 				i: before.i + ($elm$core$Basics$cos(radian) * before.Q),
 				j: before.j + ($elm$core$Basics$sin(radian) * before.Q)
 			});
@@ -7939,10 +7969,10 @@ var $evancz$elm_playground$Playground$toY = function (keyboard) {
 var $author$project$Main$update = F2(
 	function (computer, model) {
 		var nextSight = {
-			i: model.z.i + ($evancz$elm_playground$Playground$toX(computer.Z) * 5),
-			j: model.z.j + ($evancz$elm_playground$Playground$toY(computer.Z) * 5)
+			i: model.J.i + ($evancz$elm_playground$Playground$toX(computer.Z) * 5),
+			j: model.J.j + ($evancz$elm_playground$Playground$toY(computer.Z) * 5)
 		};
-		var fire = ($elm$core$List$length(model.v) > 0) && (computer.Z.bh && (model.B <= 0));
+		var fire = ($elm$core$List$length(model.v) > 0) && (computer.Z.bh && (model.A <= 0));
 		var nextBulletHoles = A2(
 			$elm$core$List$filter,
 			function (h) {
@@ -7958,38 +7988,38 @@ var $author$project$Main$update = F2(
 				fire ? A2(
 					$elm$core$List$cons,
 					A2($author$project$Main$initBulletHole, nextSight.i, nextSight.j),
-					model.I) : model.I));
-		var nextBullets = fire ? A2($elm$core$List$drop, 1, model.v) : (((!$elm$core$List$length(model.v)) && (model.B <= 0)) ? $author$project$Main$initBullets : model.v);
-		var enemyPopCooldown = model.X - ((1 / 60) / 3);
+					model.H) : model.H));
+		var nextBullets = fire ? A2($elm$core$List$drop, 1, model.v) : (((!$elm$core$List$length(model.v)) && (model.A <= 0)) ? $author$project$Main$initBullets : model.v);
+		var enemyPopCooldown = model.X - ((1 / 60) / 2);
 		var _v0 = A5($author$project$Main$mayPopEnemies, computer, model.ac, model.as, enemyPopCooldown, model.O);
 		var enemiesAfterPop = _v0.a;
 		var s1 = _v0.b;
-		var enemiesAfterFire = fire ? A2(
+		var enemiesAfterFire = A2(
 			$elm$core$List$filter,
 			function (e) {
-				return !A3($author$project$Main$isHitEnemy, model.z.i, model.z.j, e);
+				return !A2($author$project$Main$isHolesHitEnemy, nextBulletHoles, e);
 			},
-			enemiesAfterPop) : enemiesAfterPop;
+			enemiesAfterPop);
 		var deleteCount = (model.W + $elm$core$List$length(enemiesAfterPop)) - $elm$core$List$length(enemiesAfterFire);
 		return _Utils_update(
 			model,
 			{
-				I: nextBulletHoles,
+				H: nextBulletHoles,
 				v: nextBullets,
-				B: fire ? 1 : A2(
+				A: fire ? 1 : A2(
 					$elm$core$Basics$max,
 					0,
-					model.B - ((!$elm$core$List$length(nextBullets)) ? 0.01 : 0.05)),
+					model.A - ((!$elm$core$List$length(nextBullets)) ? 0.01 : 0.05)),
 				W: deleteCount,
 				O: A2(
 					$elm$core$List$map,
 					function (e) {
-						return A2($author$project$Main$moveEnemy, computer.E, e);
+						return A2($author$project$Main$moveEnemy, computer.D, e);
 					},
 					enemiesAfterFire),
 				X: (enemyPopCooldown <= 0) ? 1 : enemyPopCooldown,
 				ac: s1,
-				z: nextSight
+				J: nextSight
 			});
 	});
 var $evancz$elm_playground$Playground$Hex = function (a) {
@@ -8156,7 +8186,7 @@ var $author$project$View$scoreBoard = F2(
 			A3(
 				$evancz$elm_playground$Playground$move,
 				0,
-				com.E.aY - 16,
+				com.D.aY - 16,
 				$evancz$elm_playground$Playground$group(
 					_List_fromArray(
 						[
@@ -8205,7 +8235,7 @@ var $author$project$Main$view = F2(
 					$elm$core$List$indexedMap,
 					F2(
 						function (i, bul) {
-							return A3($author$project$View$bullet, computer.E, i, bul);
+							return A3($author$project$View$bullet, computer.D, i, bul);
 						}),
 					model.v),
 				_Utils_ap(
@@ -8214,11 +8244,11 @@ var $author$project$Main$view = F2(
 						function (hole) {
 							return $author$project$View$bulletHole(hole);
 						},
-						model.I),
+						model.H),
 					_List_fromArray(
 						[
-							A2($author$project$View$cooldown, computer.E, model.B),
-							$author$project$View$sight(model.z),
+							A2($author$project$View$cooldown, computer.D, model.A),
+							$author$project$View$sight(model.J),
 							A2($author$project$View$scoreBoard, computer, model)
 						]))));
 	});
