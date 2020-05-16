@@ -1,15 +1,17 @@
-module Model exposing (Bullet, BulletHole, Enemy, Model, Sight)
+module Model exposing (Bullet, BulletHole, Enemy, Model, Sight, maxEnemyAtLevel)
 
 import Random
 
 
 type alias Model =
     { seed : Random.Seed
+    , level : Int
     , enemies : List Enemy
     , bullets : List Bullet
     , sight : Sight
     , cooldown : Float
     , bulletHoles : List BulletHole
+    , enemyPopCooldown : Float
     }
 
 
@@ -36,3 +38,8 @@ type alias Sight =
     { x : Float
     , y : Float
     }
+
+
+maxEnemyAtLevel : Int -> Int
+maxEnemyAtLevel level =
+    20 * level

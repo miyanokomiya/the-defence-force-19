@@ -1,7 +1,20 @@
-module View exposing (bullet, bulletHole, cooldown, enemy, sight)
+module View exposing (bullet, bulletHole, cooldown, enemy, scoreBoard, sight)
 
-import Model
+import Model exposing (Model)
 import Playground
+
+
+scoreBoard : Playground.Computer -> Model -> Playground.Shape
+scoreBoard com model =
+    Playground.group
+        [ Playground.words Playground.black
+            (String.fromInt (List.length model.enemies)
+                ++ " / "
+                ++ String.fromInt (Model.maxEnemyAtLevel model.level)
+            )
+        ]
+        |> Playground.move 0 (com.screen.top - 16)
+        |> Playground.scale 1.5
 
 
 sight : Model.Sight -> Playground.Shape

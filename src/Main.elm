@@ -1,5 +1,6 @@
 module Main exposing (..)
 
+import Math.Vector2 as Vector2
 import Model exposing (Model)
 import Playground exposing (..)
 import Random
@@ -9,11 +10,13 @@ import View
 initModel : Model
 initModel =
     { seed = Random.initialSeed 1
+    , level = 1
     , enemies = []
     , bullets = initBullets
     , sight = { x = 0, y = 0 }
     , cooldown = 0
     , bulletHoles = []
+    , enemyPopCooldown = 1
     }
 
 
@@ -59,12 +62,16 @@ view computer model =
            )
         ++ [ View.cooldown computer.screen model.cooldown
            , View.sight model.sight
+           , View.scoreBoard computer model
            ]
 
 
 update : Computer -> Model -> Model
 update computer model =
     let
+        enemyPopCooldown =
+            model.enemyPopCooldown - 1 / 60 / 3
+
         fire =
             List.length model.bullets > 0 && computer.keyboard.space && model.cooldown <= 0
 
@@ -94,10 +101,23 @@ update computer model =
                 |> List.filter (\h -> h.life > 0)
 
         ( enemiesAfterPop, s1 ) =
-            mayPopEnemies computer model.seed model.enemies
+            mayPopEnemies computer model.seed model.level enemyPopCooldown model.enemies
+
+        enemiesAfterFire =
+            if fire then
+                enemiesAfterPop |> List.filter (\e -> isHitEnemy model.sight.x model.sight.y e == False)
+
+            else
+                enemiesAfterPop
     in
     { model
-        | sight = nextSight
+        | enemyPopCooldown =
+            if enemyPopCooldown <= 0 then
+                1
+
+            else
+                enemyPopCooldown
+        , sight = nextSight
         , bullets = nextBullets
         , bulletHoles = nextBulletHoles
         , cooldown =
@@ -115,15 +135,15 @@ update computer model =
                           )
                     )
         , enemies =
-            enemiesAfterPop
+            enemiesAfterFire
                 |> List.map (\e -> moveEnemy computer.screen e)
         , seed = s1
     }
 
 
-mayPopEnemies : Computer -> Random.Seed -> List Model.Enemy -> ( List Model.Enemy, Random.Seed )
-mayPopEnemies com seed before =
-    if modBy 360 (floor (spin 3 com.time)) < 3 then
+mayPopEnemies : Computer -> Random.Seed -> Int -> Float -> List Model.Enemy -> ( List Model.Enemy, Random.Seed )
+mayPopEnemies com seed level cooldown before =
+    if List.length before < Model.maxEnemyAtLevel level && cooldown <= 0 then
         let
             ( pop, nextSeed ) =
                 popEnemy com seed
@@ -145,13 +165,16 @@ popEnemy com seed =
 
         ( direction, s2 ) =
             Random.step (Random.float (pi * 5 / 4) (pi * 7 / 4)) s1
+
+        ( speed, s3 ) =
+            Random.step (Random.float 1 5) s2
     in
     ( { x = x
       , y = y
       , direction = direction
-      , speed = 3
+      , speed = speed
       }
-    , s2
+    , s3
     )
 
 
@@ -173,3 +196,8 @@ moveEnemy screen before =
         , x = before.x + cos radian * before.speed
         , y = before.y + sin radian * before.speed
     }
+
+
+isHitEnemy : Float -> Float -> Model.Enemy -> Bool
+isHitEnemy x y enemy =
+    Vector2.distance (Vector2.vec2 x y) (Vector2.vec2 enemy.x enemy.y) < 48
