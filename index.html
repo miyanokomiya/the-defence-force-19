@@ -8100,13 +8100,24 @@ var $author$project$Main$update = F2(
 				J: nextSight
 			});
 	});
-var $evancz$elm_playground$Playground$Hex = function (a) {
-	return {$: 0, a: a};
-};
-var $evancz$elm_playground$Playground$blue = $evancz$elm_playground$Playground$Hex('#3465a4');
+var $evancz$elm_playground$Playground$Image = F3(
+	function (a, b, c) {
+		return {$: 5, a: a, b: b, c: c};
+	});
 var $evancz$elm_playground$Playground$Shape = F6(
 	function (a, b, c, d, e, f) {
 		return {$: 0, a: a, b: b, c: c, d: d, e: e, f: f};
+	});
+var $evancz$elm_playground$Playground$image = F3(
+	function (w, h, src) {
+		return A6(
+			$evancz$elm_playground$Playground$Shape,
+			0,
+			0,
+			0,
+			1,
+			1,
+			A3($evancz$elm_playground$Playground$Image, w, h, src));
 	});
 var $evancz$elm_playground$Playground$move = F3(
 	function (dx, dy, _v0) {
@@ -8118,6 +8129,63 @@ var $evancz$elm_playground$Playground$move = F3(
 		var f = _v0.f;
 		return A6($evancz$elm_playground$Playground$Shape, x + dx, y + dy, a, s, o, f);
 	});
+var $evancz$elm_playground$Playground$rotate = F2(
+	function (da, _v0) {
+		var x = _v0.a;
+		var y = _v0.b;
+		var a = _v0.c;
+		var s = _v0.d;
+		var o = _v0.e;
+		var f = _v0.f;
+		return A6($evancz$elm_playground$Playground$Shape, x, y, a + da, s, o, f);
+	});
+var $author$project$View$bullet = F3(
+	function (screen, index, _v0) {
+		return A3(
+			$evancz$elm_playground$Playground$move,
+			screen.aU - 40,
+			((index * 30) + 40) + screen.a5,
+			A2(
+				$evancz$elm_playground$Playground$rotate,
+				44,
+				A3($evancz$elm_playground$Playground$image, 40, 40, 'assets/bullet.png')));
+	});
+var $evancz$elm_playground$Playground$fade = F2(
+	function (o, _v0) {
+		var x = _v0.a;
+		var y = _v0.b;
+		var a = _v0.c;
+		var s = _v0.d;
+		var f = _v0.f;
+		return A6($evancz$elm_playground$Playground$Shape, x, y, a, s, o, f);
+	});
+var $author$project$View$bulletHole = function (hole) {
+	return A3(
+		$evancz$elm_playground$Playground$move,
+		hole.k,
+		hole.l,
+		A2(
+			$evancz$elm_playground$Playground$fade,
+			hole.P,
+			A3($evancz$elm_playground$Playground$image, 128, 128, 'assets/bullet_hole_1.png')));
+};
+var $evancz$elm_playground$Playground$Hex = function (a) {
+	return {$: 0, a: a};
+};
+var $evancz$elm_playground$Playground$blue = $evancz$elm_playground$Playground$Hex('#3465a4');
+var $evancz$elm_playground$Playground$Group = function (a) {
+	return {$: 7, a: a};
+};
+var $evancz$elm_playground$Playground$group = function (shapes) {
+	return A6(
+		$evancz$elm_playground$Playground$Shape,
+		0,
+		0,
+		0,
+		1,
+		1,
+		$evancz$elm_playground$Playground$Group(shapes));
+};
 var $evancz$elm_playground$Playground$Rectangle = F3(
 	function (a, b, c) {
 		return {$: 2, a: a, b: b, c: c};
@@ -8133,62 +8201,6 @@ var $evancz$elm_playground$Playground$rectangle = F3(
 			1,
 			A3($evancz$elm_playground$Playground$Rectangle, color, width, height));
 	});
-var $author$project$View$bullet = F3(
-	function (screen, index, _v0) {
-		var h = 16;
-		return A3(
-			$evancz$elm_playground$Playground$move,
-			screen.aU - 50,
-			(((index * 20) + (h / 2)) + 30) + screen.a5,
-			A3($evancz$elm_playground$Playground$rectangle, $evancz$elm_playground$Playground$blue, 40, h));
-	});
-var $evancz$elm_playground$Playground$fade = F2(
-	function (o, _v0) {
-		var x = _v0.a;
-		var y = _v0.b;
-		var a = _v0.c;
-		var s = _v0.d;
-		var f = _v0.f;
-		return A6($evancz$elm_playground$Playground$Shape, x, y, a, s, o, f);
-	});
-var $evancz$elm_playground$Playground$Image = F3(
-	function (a, b, c) {
-		return {$: 5, a: a, b: b, c: c};
-	});
-var $evancz$elm_playground$Playground$image = F3(
-	function (w, h, src) {
-		return A6(
-			$evancz$elm_playground$Playground$Shape,
-			0,
-			0,
-			0,
-			1,
-			1,
-			A3($evancz$elm_playground$Playground$Image, w, h, src));
-	});
-var $author$project$View$bulletHole = function (hole) {
-	return A3(
-		$evancz$elm_playground$Playground$move,
-		hole.k,
-		hole.l,
-		A2(
-			$evancz$elm_playground$Playground$fade,
-			hole.P,
-			A3($evancz$elm_playground$Playground$image, 128, 128, 'assets/bullet_hole_1.png')));
-};
-var $evancz$elm_playground$Playground$Group = function (a) {
-	return {$: 7, a: a};
-};
-var $evancz$elm_playground$Playground$group = function (shapes) {
-	return A6(
-		$evancz$elm_playground$Playground$Shape,
-		0,
-		0,
-		0,
-		1,
-		1,
-		$evancz$elm_playground$Playground$Group(shapes));
-};
 var $author$project$View$cooldown = F2(
 	function (screen, t) {
 		var h = 100;
@@ -8299,34 +8311,34 @@ var $author$project$View$sight = function (si) {
 };
 var $author$project$Main$view = F2(
 	function (computer, model) {
-		return _Utils_ap(
-			A2(
-				$elm$core$List$map,
-				function (e) {
-					return $author$project$View$enemy(e);
-				},
-				model.O),
-			_Utils_ap(
+		return _List_fromArray(
+			[
+				$evancz$elm_playground$Playground$group(
+				A2(
+					$elm$core$List$map,
+					function (e) {
+						return $author$project$View$enemy(e);
+					},
+					model.O)),
+				$evancz$elm_playground$Playground$group(
 				A2(
 					$elm$core$List$indexedMap,
 					F2(
 						function (i, bul) {
 							return A3($author$project$View$bullet, computer.C, i, bul);
 						}),
-					model.v),
-				_Utils_ap(
-					A2(
-						$elm$core$List$map,
-						function (hole) {
-							return $author$project$View$bulletHole(hole);
-						},
-						model.G),
-					_List_fromArray(
-						[
-							A2($author$project$View$cooldown, computer.C, model.A),
-							$author$project$View$sight(model.J),
-							A2($author$project$View$scoreBoard, computer, model)
-						]))));
+					model.v)),
+				$evancz$elm_playground$Playground$group(
+				A2(
+					$elm$core$List$map,
+					function (hole) {
+						return $author$project$View$bulletHole(hole);
+					},
+					model.G)),
+				A2($author$project$View$cooldown, computer.C, model.A),
+				$author$project$View$sight(model.J),
+				A2($author$project$View$scoreBoard, computer, model)
+			]);
 	});
 var $author$project$Main$main = A3($evancz$elm_playground$Playground$game, $author$project$Main$view, $author$project$Main$update, $author$project$Main$initModel);
 _Platform_export({'Main':{'init':$author$project$Main$main(
