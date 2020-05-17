@@ -34,7 +34,16 @@ sight si =
 
 enemy : Model.Enemy -> Playground.Shape
 enemy en =
-    Playground.square Playground.red 40
+    (case en.type_ of
+        Model.EnemyA ->
+            Playground.image 32 32 "assets/virus_1.png"
+
+        Model.EnemyB ->
+            Playground.image 40 40 "assets/virus_2.png"
+
+        Model.EnemyC ->
+            Playground.image 48 48 "assets/virus_3.png"
+    )
         |> Playground.move en.x en.y
 
 

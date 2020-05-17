@@ -1,4 +1,12 @@
-module Model exposing (Bullet, BulletHole, Enemy, Model, Sight, maxEnemyAtLevel)
+module Model exposing
+    ( Bullet
+    , BulletHole
+    , Enemy
+    , EnemyType(..)
+    , Model
+    , Sight
+    , maxEnemyAtLevel
+    )
 
 import Random
 
@@ -16,11 +24,18 @@ type alias Model =
     }
 
 
+type EnemyType
+    = EnemyA
+    | EnemyB
+    | EnemyC
+
+
 type alias Enemy =
     { x : Float
     , y : Float
     , direction : Float
     , speed : Float
+    , type_ : EnemyType
     }
 
 

@@ -21,15 +21,6 @@ initModel =
     }
 
 
-initEnemy : Float -> Float -> Model.Enemy
-initEnemy x y =
-    { x = x
-    , y = y
-    , direction = pi / 4
-    , speed = 5
-    }
-
-
 initBullets : List Model.Bullet
 initBullets =
     [ {}, {}, {}, {}, {}, {} ]
@@ -169,13 +160,17 @@ popEnemy com seed =
 
         ( speed, s3 ) =
             Random.step (Random.float 1 5) s2
+
+        ( type_, s4 ) =
+            Random.step (Random.uniform Model.EnemyA [ Model.EnemyB, Model.EnemyC ]) s3
     in
     ( { x = x
       , y = y
       , direction = direction
       , speed = speed
+      , type_ = type_
       }
-    , s3
+    , s4
     )
 
 
