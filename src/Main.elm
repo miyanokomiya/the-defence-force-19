@@ -40,22 +40,27 @@ main =
 
 view : Computer -> Model -> List Shape
 view computer model =
-    (model.enemies
-        |> List.map
-            (\e -> View.enemy e)
-    )
-        ++ (model.bullets
-                |> List.indexedMap
-                    (\i bul -> View.bullet computer.screen i bul)
-           )
-        ++ (model.bulletHoles
-                |> List.map
-                    (\hole -> View.bulletHole hole)
-           )
-        ++ [ View.cooldown computer.screen model.cooldown
-           , View.sight model.sight
-           , View.scoreBoard computer model
-           ]
+    [ Playground.group
+        (model.enemies
+            |> List.map
+                (\e -> View.enemy e)
+        )
+    , Playground.group
+        (model.bullets
+            |> List.indexedMap
+                (\i bul -> View.bullet computer.screen i bul)
+        )
+    , Playground.group
+        (model.bulletHoles
+            |> List.map
+                (\hole -> View.bulletHole hole)
+        )
+    , View.cooldown
+        computer.screen
+        model.cooldown
+    , View.sight model.sight
+    , View.scoreBoard computer model
+    ]
 
 
 update : Computer -> Model -> Model

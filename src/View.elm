@@ -49,12 +49,9 @@ enemy en =
 
 bullet : Playground.Screen -> Int -> Model.Bullet -> Playground.Shape
 bullet screen index _ =
-    let
-        h =
-            16
-    in
-    Playground.rectangle Playground.blue 40 h
-        |> Playground.move (screen.right - 50) (toFloat (index * 20) + h / 2 + 30 + screen.bottom)
+    Playground.image 40 40 "assets/bullet.png"
+        |> Playground.rotate 44
+        |> Playground.move (screen.right - 40) (toFloat (index * 30) + 40 + screen.bottom)
 
 
 bulletHole : Model.BulletHole -> Playground.Shape
